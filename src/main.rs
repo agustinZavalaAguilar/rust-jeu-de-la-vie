@@ -6,10 +6,10 @@ use std::time::Duration;
 
 fn main() {
   let mut  matrix = start_matrix();
-  const MAX_GEN: i8 = 1;
+  const MAX_GEN: i8 = 10;
   let mut generation = 1 ;
      while generation <= MAX_GEN {
-    //     print!("\x1B[2J\x1B[1;1H");
+         print!("\x1B[2J\x1B[1;1H");
        
         let matrix_next_gen = feed_next_gen(matrix);
 
@@ -17,11 +17,24 @@ fn main() {
          for row in 0..matrix_next_gen.len() {
              println!("{:?}", matrix_next_gen[row]);
          }
-        //if matrix == matrix_next_gen { 
-           // println!("situation stable");
-           // break; 
-        //}
-        // thread::sleep(Duration::from_millis(1000));
+        if matrix == matrix_next_gen { 
+            let mut matrix_null = true;
+            for y in 0..matrix.len().try_into().unwrap() {
+                for x in 0..matrix[0].len().try_into().unwrap() {
+                    if matrix_next_gen[y][x] != 0 {
+                        matrix_null = false;
+                    }
+                }
+            }
+            if matrix_null == true {
+                println!("Toute les cellules sont mortes !");
+                break;
+            }else{
+                println!("situation stable");
+                break;
+            } 
+        }
+        thread::sleep(Duration::from_millis(1000));
         //println!("'Next gen = '{:?}", matrix_next_gen);
          matrix = matrix_next_gen;
 
@@ -41,7 +54,7 @@ fn start_matrix() -> [[i8; 3]; 3]{
 
     let mut matrix: [[i8; 3]; 3] = [[0; 3]; 3];
     matrix[1][0] = 1;
-    matrix[1][1] = 1;
+    matrix[1][1] = 0;
     matrix[1][2] = 1;
      println!("Génération 0 (initial) : ");
     for row in 0..matrix.len() {
@@ -108,16 +121,16 @@ fn feed_next_gen(matrix: [[i8; 3]; 3]) -> [[i8; 3]; 3] {
     for y in 0..matrix.len().try_into().unwrap() {
         for x in 0..matrix[0].len().try_into().unwrap() {
             let neighbors = check_neighbors(matrix, x, y);
-            println!("'neighbors outside condition:'{}", neighbors);
-            if matrix[x as usize][y as usize] == 1 {
-                println!("'neighbors 1st condition :  '{}", neighbors);
+            //println!("'neighbors outside condition:'{}", neighbors);
+            if matrix[y as usize][x as usize] == 1 {
+                //println!("'neighbors 1st condition :  '{}", neighbors);
                 if neighbors < 2 || neighbors > 3 {   
-                    println!("'hello :'{}", "hello");
+                    //println!("'hello :'{}", "hello");
                     matrix_next_gen[y as usize][x as usize] = 0;                 
                 } 
             } else {
                 if neighbors == 3 {
-                    println!("'neighbors 2nd condition :  '{}", neighbors);
+                    //println!("'neighbors 2nd condition :  '{}", neighbors);
                     matrix_next_gen[y as usize][x as usize] = 1;
                 }
             }
