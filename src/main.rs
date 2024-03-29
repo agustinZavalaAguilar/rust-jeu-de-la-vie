@@ -1,7 +1,9 @@
-use std::array;
-use std::io::{self, Write};
+use std::collections::hash_map::RandomState;
+// use std::array;
+// use std::io::{self, Write};
 use std::thread;
 use std::time::Duration;
+use rand::{random, Rng};
 
 #[derive(Debug, Clone, PartialEq)] // Ajoutez cet attribut à votre énumération
 
@@ -15,7 +17,7 @@ enum CellState {
 fn main() {
     
   let mut  matrix = start_matrix();
-  const MAX_GEN: i8 = 100;
+  const MAX_GEN: i8 = 10;
   let mut generation = 1 ;
      while generation <= MAX_GEN {
          print!("\x1B[2J\x1B[1;1H");
@@ -60,24 +62,36 @@ fn start_matrix() -> Vec<Vec<CellState>>{
 
 
     print!("\x1B[2J\x1B[1;1H");
-    // let size_x: i8 = 3;
-    // let size_y: i8 = 3;
+     let size_x = 4;
+    let size_y = 3;
 
     let mut matrix: Vec<Vec<CellState>> =  vec![
-        vec![CellState::Dead; 3],
-        vec![CellState::Dead; 3],
-        vec![CellState::Dead; 3],  
-    ]; 
-    matrix[0][1] = CellState::Alive;
-    matrix[1][1] = CellState::Alive;
-    matrix[2][1] = CellState::Alive;
+        vec![CellState::Dead; size_x]; size_y];
+
+   
+
+    for y in 0..matrix.len() {
+        for x in 0..matrix[0].len(){
+
+        // Generates a random number between 0 and  1
+            let mut rnd = rand::thread_rng();
+            let random_state:i8 = rnd.gen_range(0,2);
+            if random_state == 1 {
+                matrix[y][x] = CellState::Alive;
+            } 
+    }
+}
+
+    // matrix[0][1] = CellState::Alive;
+    // matrix[1][1] = CellState::Alive;
+    // matrix[2][1] = CellState::Alive;
     
      println!("Génération 0 (initial) : ");
     for row in 0..matrix.len() {
       println!("{:?}", matrix[row]);
     }
 
-    thread::sleep(Duration::from_millis(1000));
+    thread::sleep(Duration::from_millis(3000));
     
     return matrix ; 
 }
