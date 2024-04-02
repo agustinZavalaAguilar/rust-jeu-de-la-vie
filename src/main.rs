@@ -26,7 +26,8 @@ fn main() {
 
          println!("Génération {} : ", generation);
          for row in 0..matrix_next_gen.len() {
-             println!("{:?}", matrix_next_gen[row]);
+            display_row(&matrix_next_gen[row]);
+            //println!("{:?}", matrix_next_gen[row]);
          }
         if matrix == matrix_next_gen { 
             let mut matrix_null = true;
@@ -163,17 +164,17 @@ fn feed_next_gen(matrix: &Vec<Vec<CellState>>) -> Vec<Vec<CellState>> {
         for x in 0..matrix[0].len(){
             let neighbors = check_neighbors(& matrix, x, y);
             //println!("'neighbors outside condition:'{}", neighbors);
-            if matrix[y as usize][x as usize] == CellState::Alive {
+            if matrix[y][x] == CellState::Alive {
                 //println!("'neighbors 1st condition :  '{}", neighbors);
                 if neighbors < 2 || neighbors > 3 {   
                     //println!("'hello :'{}", "hello");
-                    matrix_next_gen[y][x as usize] = CellState::Dead;                 
+                    matrix_next_gen[y][x] = CellState::Dead;                 
                 } 
             } else {
                 if neighbors == 3 {
                     //println!("'neighbors 2nd condition :  '{}", neighbors);
 
-                    matrix_next_gen[y as usize][x as usize] = CellState::Alive;
+                    matrix_next_gen[y][x] = CellState::Alive;
                 }
             }
         }
@@ -184,7 +185,19 @@ fn feed_next_gen(matrix: &Vec<Vec<CellState>>) -> Vec<Vec<CellState>> {
     matrix_next_gen
 }
 
+fn display_cell(cell : &CellState) {
+    match cell  {
+        CellState::Alive =>  print!(" 1 "),
+        CellState::Dead =>   print!(" 0 "),
+    }
+} 
 
+fn display_row(cells : &Vec<CellState>) {
+    for cell in cells {
+        display_cell(cell);
+    }
+    println!()
+}
 
 
 
